@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stack Visualization</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    .controls {
+        margin-bottom: 15px;
+    }
+
+    input {
+        padding: 6px;
+        width: 120px;
+    }
+
+    button {
+        padding: 6px 10px;
+        margin: 0 4px;
+        cursor: pointer;
+    }
+
+    .message {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #333;
+        height: 20px;
+    }
+
+    .stack-container {
+        margin-top: 20px;
+        width: 200px;
+        height: 300px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        padding: 5px;
+        background: #fff;
+    }
+
+    .stack-item {
+        width: 90%;
+        padding: 8px;
+        margin: 4px 0;
+        background: #4caf50;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .top-label {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>Stack Visualization</h1>
+
+<div class="controls">
+    <input type="text" id="valueInput" placeholder="Enter value">
+    <button onclick="push()">Push</button>
+    <button onclick="pop()">Pop</button>
+    <button onclick="peek()">Peek</button>
+</div>
+
+<div class="message" id="message"></div>
+
+<div class="stack-container" id="stack"></div>
+
+<div class="top-label" id="topValue">Top: None</div>
+
+<script>
+    const stack = [];
+    const MAX_SIZE = 5;
+
+    const stackDiv = document.getElementById("stack");
+    const message = document.getElementById("message");
+    const topValue = document.getElementById("topValue");
+
+    function renderStack() {
+        stackDiv.innerHTML = "";
+        stack.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "stack-item";
+            div.innerText = item;
+            stackDiv.appendChild(div);
+        });
+
+        topValue.innerText = stack.length > 0
+            ? "Top: " + stack[stack.length - 1]
+            : "Top: None";
+    }
+
+    function push() {
+        const value = document.getElementById("valueInput").value;
+        if (!value) {
+            message.innerText = "Enter a value to push!";
+            return;
+        }
+
+        if (stack.length === MAX_SIZE) {
+            message.innerText = "Stack Overflow!";
+            return;
+        }
+
+        stack.push(value);
+        message.innerText = "Pushed: " + value;
+        document.getElementById("valueInput").value = "";
+        renderStack();
+    }
+
+    function pop() {
+        if (stack.length === 0) {
+            message.innerText = "Stack Underflow!";
+            return;
+        }
+
+        const popped = stack.pop();
+        message.innerText = "Popped: " + popped;
+        renderStack();
+    }
+
+    function peek() {
+        if (stack.length === 0) {
+            message.innerText = "Stack is empty!";
+        } else {
+            message.innerText = "Peek: " + stack[stack.length - 1];
+        }
+    }
+</script>
+
+</body>
+</html>
